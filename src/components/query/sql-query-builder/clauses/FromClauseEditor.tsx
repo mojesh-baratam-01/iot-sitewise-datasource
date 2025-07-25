@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select } from '@grafana/ui';
-import { EditorField, EditorFieldGroup, EditorRow } from '@grafana/plugin-ui';
+import { EditorField, EditorFieldGroup } from '@grafana/plugin-ui';
 import { StyledLabel } from '../StyledLabel';
 
 interface FromClauseEditorProps {
@@ -11,6 +11,8 @@ interface FromClauseEditorProps {
       selectedAssetModel: string;
       selectFields: Array<{ column: string; aggregation: string; alias: string }>;
       whereConditions: Array<{ column: string; operator: string; value: string; logicalOperator: 'AND' | 'OR' }>;
+      groupByFields?: Array<{ column: string }>;
+      orderByFields: Array<{ column: string; direction: 'ASC' | 'DESC' }>;
     }>
   ) => void;
 }
@@ -26,27 +28,27 @@ export const FromClauseEditor: React.FC<FromClauseEditorProps> = ({ assetModels,
   }
 
   return (
-    <EditorRow>
-      <EditorFieldGroup>
-        <StyledLabel text="FROM" width={15} tooltip />
-        <EditorField label="" width={30}>
-          <Select
-            options={assetModels.map((model) => ({
-              label: model.name,
-              value: model.id,
-            }))}
-            value={selectedValue}
-            onChange={(option) =>
-              updateQuery({
-                selectedAssetModel: option?.value || '',
-                selectFields: [{ column: '', aggregation: '', alias: '' }],
-                whereConditions: [{ column: '', operator: '', value: '', logicalOperator: 'AND' }],
-              })
-            }
-            placeholder="Select model..."
-          />
-        </EditorField>
-      </EditorFieldGroup>
-    </EditorRow>
+    <EditorFieldGroup>
+      <StyledLabel text="FROM" width={15} tooltip />
+      <EditorField label="" width={30}>
+        <Select
+          options={assetModels.map((model) => ({
+            label: model.name,
+            value: model.id,
+          }))}
+          value={selectedValue}
+          onChange={(option) =>
+            updateQuery({
+              selectedAssetModel: option?.value || '',
+              selectFields: [{ column: '', aggregation: '', alias: '' }],
+              whereConditions: [{ column: '', operator: '', value: '', logicalOperator: 'AND' }],
+              groupByFields: [{ column: '' }],
+              orderByFields: [{ column: '', direction: 'ASC' }],
+            })
+          }
+          placeholder="Select model..."
+        />
+      </EditorField>
+    </EditorFieldGroup>
   );
 };
