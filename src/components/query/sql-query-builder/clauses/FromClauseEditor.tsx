@@ -16,6 +16,15 @@ interface FromClauseEditorProps {
 }
 
 export const FromClauseEditor: React.FC<FromClauseEditorProps> = ({ assetModels, selectedModelId, updateQuery }) => {
+  let selectedValue = null;
+  const matchedModel = assetModels.find((m) => m.id === selectedModelId);
+
+  if (selectedModelId) {
+    selectedValue = matchedModel
+      ? { label: matchedModel.name, value: selectedModelId }
+      : { label: '', value: selectedModelId }; // ensures the case is tracked
+  }
+
   return (
     <EditorRow>
       <EditorFieldGroup>
@@ -26,14 +35,7 @@ export const FromClauseEditor: React.FC<FromClauseEditorProps> = ({ assetModels,
               label: model.name,
               value: model.id,
             }))}
-            value={
-              selectedModelId
-                ? {
-                    label: assetModels.find((m) => m.id === selectedModelId)?.name || '',
-                    value: selectedModelId,
-                  }
-                : null
-            }
+            value={selectedValue}
             onChange={(option) =>
               updateQuery({
                 selectedAssetModel: option?.value || '',
