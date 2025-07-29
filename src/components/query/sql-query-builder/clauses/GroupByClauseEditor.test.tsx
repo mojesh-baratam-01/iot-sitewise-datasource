@@ -44,7 +44,7 @@ describe('GroupByClauseEditor', () => {
     );
 
     expect(screen.getByText('GROUP BY')).toBeInTheDocument();
-    expect(screen.getByRole('combobox')).toBeInTheDocument(); // FIXED
+    expect(screen.getByTestId('select')).toBeInTheDocument();
   });
 
   it('handles selecting groupByTags', async () => {
@@ -57,7 +57,8 @@ describe('GroupByClauseEditor', () => {
       />
     );
 
-    const select = screen.getByRole('combobox');
+    expect(screen.getByTestId('select')).toBeInTheDocument();
+    const select = screen.getByTestId('select');
 
     // Select "Device ID"
     fireEvent.change(select, { target: { value: 'deviceId' } });
@@ -178,16 +179,71 @@ describe('GroupByClauseEditor', () => {
     );
 
     // Open the multi-select dropdown
-    const select = screen.getByRole('combobox');
-    await user.click(select);
+    const select = screen.getByTestId('select'); // ✅ Updated
+    await user.selectOptions(select, ['deviceId', 'assetName']); // ✅ Use selectOptions for <select multiple />
 
-    // Select multiple options
-    await user.click(screen.getByText('Device ID'));
-    await user.click(screen.getByText('Asset Name'));
-
-    // The last click will trigger the onChange and call updateQuery
     expect(updateQuery).toHaveBeenCalledWith({
       groupByTags: ['deviceId', 'assetName'],
+      groupByTime: '',
+    });
+  });
+
+  it('handles groupByTags with single value', async () => {
+    render(
+      <GroupByClauseEditor
+        availablePropertiesForGrouping={availablePropertiesForGrouping}
+        groupByTags={[]}
+        groupByTime=""
+        updateQuery={updateQuery}
+      />
+    );
+
+    const select = screen.getByTestId('select');
+    await userEvent.selectOptions(select, 'deviceId');
+
+    expect(updateQuery).toHaveBeenCalledWith({
+      groupByTags: ['deviceId'],
+      groupByTime: '',
+    });
+  });
+
+  it('handles groupByTags with multi value', async () => {
+    render(
+      <GroupByClauseEditor
+        availablePropertiesForGrouping={availablePropertiesForGrouping}
+        groupByTags={[]}
+        groupByTime=""
+        updateQuery={updateQuery}
+      />
+    );
+
+    const select = screen.getByTestId('select');
+    await userEvent.selectOptions(select, ['deviceId', 'assetName']);
+
+    expect(updateQuery).toHaveBeenCalledWith({
+      groupByTags: ['deviceId', 'assetName'],
+      groupByTime: '',
+    });
+  });
+
+  it('handles groupByTags as single object (non-array)', async () => {
+    render(
+      <GroupByClauseEditor
+        availablePropertiesForGrouping={availablePropertiesForGrouping}
+        groupByTags={[]}
+        groupByTime=""
+        updateQuery={updateQuery}
+      />
+    );
+
+    const select = screen.getByTestId('select');
+
+    fireEvent.change(select, {
+      target: { value: 'timeInterval' },
+    });
+
+    expect(updateQuery).toHaveBeenCalledWith({
+      groupByTags: ['timeInterval'], // only this is passed
     });
   });
 });

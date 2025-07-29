@@ -1,6 +1,3 @@
-/**
- * @jest-environment jsdom
- */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { SelectClauseEditor } from './SelectClauseEditor';
@@ -118,7 +115,15 @@ describe('SelectClauseEditor', () => {
     fireEvent.change(aggSelect, { target: { value: '' } });
     expect(mockUpdateQuery).toHaveBeenCalledWith(
       expect.objectContaining({
-        selectFields: [{ column: 'temperature', aggregation: '', alias: '' }],
+        selectFields: [
+          {
+            column: 'temperature',
+            aggregation: '',
+            alias: '',
+            functionArg: '',
+            functionArgValue: '',
+          },
+        ],
       })
     );
 
