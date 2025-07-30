@@ -1,9 +1,9 @@
 import React from 'react';
 import { Space } from '@grafana/ui';
-import { InlineSelect, EditorRows, QueryEditorMode } from '@grafana/plugin-ui';
+import { InlineSelect, EditorRows, QueryEditorMode, QueryEditorModeToggle } from '@grafana/plugin-ui';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { QueryEditorHeader } from '@grafana/aws-sdk';
-import { SitewiseQuery, SitewiseOptions } from 'types';
+import { SitewiseQuery, SitewiseOptions, QueryType } from 'types';
 import { DataSource } from 'SitewiseDataSource';
 import { RawQueryEditor } from 'components/query/query-editor-raw/RawQueryEditor';
 import { VisualQueryBuilder } from 'components/query/visual-query-builder/VisualQueryBuilder';
@@ -18,15 +18,15 @@ export function SitewiseQueryEditor(props: Props) {
   const editorMode = query.editorMode || QueryEditorMode.Builder;
 
   // Uncomment the following code when Builder mode is ready
-  // const onEditorModeChange = (newEditorMode: QueryEditorMode) => {
-  //   const newQuery = { ...query };
-  //   if (newEditorMode === QueryEditorMode.Code) {
-  //     newQuery.queryType = QueryType.ExecuteQuery;
-  //     newQuery.clientCache = false;
-  //     newQuery.rawSQL = newQuery.rawSQL || props.datasource.defaultQuery;
-  //   }
-  //   onChange({ ...newQuery, editorMode: newEditorMode });
-  // };
+  const onEditorModeChange = (newEditorMode: QueryEditorMode) => {
+    const newQuery = { ...query };
+    if (newEditorMode === QueryEditorMode.Code) {
+      newQuery.queryType = QueryType.ExecuteQuery;
+      newQuery.clientCache = false;
+      newQuery.rawSQL = newQuery.rawSQL || props.datasource.defaultQuery;
+    }
+    onChange({ ...newQuery, editorMode: newEditorMode });
+  };
 
   const onRegionChange = (sel: SelectableValue<Region>) => {
     onChange({ ...query, region: sel.value });
@@ -42,7 +42,7 @@ export function SitewiseQueryEditor(props: Props) {
         {...props}
         enableRunButton
         // Uncomment the following code when Builder mode is ready
-        // extraHeaderElementRight={<QueryEditorModeToggle mode={editorMode!} onChange={onEditorModeChange} />}
+        extraHeaderElementRight={<QueryEditorModeToggle mode={editorMode!} onChange={onEditorModeChange} />}
         extraHeaderElementLeft={
           editorMode === QueryEditorMode.Code ? (
             <InlineSelect

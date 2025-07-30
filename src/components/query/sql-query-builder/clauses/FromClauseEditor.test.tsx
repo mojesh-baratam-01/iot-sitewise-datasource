@@ -28,6 +28,8 @@ describe('FromClauseEditor', () => {
       selectedAssetModel: '2',
       selectFields: [{ column: '', aggregation: '', alias: '' }],
       whereConditions: [{ column: '', operator: '', value: '', logicalOperator: 'AND' }],
+      groupByFields: [{ column: '' }],
+      orderByFields: [{ column: '', direction: 'ASC' }],
     });
   });
 
@@ -61,6 +63,8 @@ describe('FromClauseEditor', () => {
       selectedAssetModel: '',
       selectFields: [{ column: '', aggregation: '', alias: '' }],
       whereConditions: [{ column: '', operator: '', value: '', logicalOperator: 'AND' }],
+      groupByFields: [{ column: '' }],
+      orderByFields: [{ column: '', direction: 'ASC' }],
     });
   });
 });

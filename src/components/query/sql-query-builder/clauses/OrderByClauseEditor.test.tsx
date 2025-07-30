@@ -68,15 +68,11 @@ describe('OrderByClauseEditor', () => {
   });
 
   it('renders a single ORDER BY row initially', () => {
-    setup();
-    // The label from StyledLabel
+    setup([{ column: 'timestamp', direction: 'ASC' }]);
     expect(screen.getByText('ORDER BY')).toBeInTheDocument();
-    // The two selects are keyed by their placeholder
     expect(screen.getByTestId('Select column...')).toBeInTheDocument();
     expect(screen.getByTestId('Direction')).toBeInTheDocument();
-    // Only add button appears
     expect(screen.getByLabelText('Add order by field')).toBeInTheDocument();
-    // Remove button should not appear
     expect(screen.queryByLabelText('Remove order by field')).toBeNull();
   });
 

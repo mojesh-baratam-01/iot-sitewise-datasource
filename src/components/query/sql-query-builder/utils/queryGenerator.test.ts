@@ -1,5 +1,5 @@
 import { generateQueryPreview } from './queryGenerator';
-import { SitewiseQueryState } from '../types';
+import { AggregationFunction, SitewiseQueryState } from '../types';
 
 describe('generateQueryPreview', () => {
   it('returns message when asset model is not selected', async () => {
@@ -202,7 +202,13 @@ describe('generateQueryPreview', () => {
       groupByTags: ['prop-1'],
       havingConditions: [
         { aggregation: 'MAX', column: '', operator: '=', value: '10', logicalOperator: 'AND' }, // invalid: empty column
-        { aggregation: '', column: 'prop-1', operator: '=', value: '20', logicalOperator: 'AND' }, // invalid: empty aggregation
+        {
+          aggregation: '' as unknown as AggregationFunction,
+          column: 'prop-1',
+          operator: '=',
+          value: '20',
+          logicalOperator: 'AND',
+        }, // invalid: empty aggregation
         { aggregation: 'MAX', column: 'prop-1', operator: '=', value: '20', logicalOperator: 'AND' }, // valid
       ],
       orderByFields: [],
