@@ -4,6 +4,7 @@ import { QueryEditorMode } from '@grafana/plugin-ui';
 import type { DataQuery } from '@grafana/schema';
 import type { Region } from './regions';
 import { SitewiseQueryState } from 'components/query/sql-query-builder/types';
+import { SitewiseQueryState } from 'components/query/sql-query-builder/types';
 
 // Matches https://github.com/grafana/iot-sitewise-datasource/blob/main/pkg/models/query.go#L3
 export enum QueryType {
@@ -69,6 +70,7 @@ export interface SitewiseQuery extends DataQuery {
   // RawQueryEditor
   rawSQL?: string;
 
+  // SQL Query Builder
   sqlQueryState?: SitewiseQueryState;
 
   /** @deprecated -- this is migrated to assetIds */
